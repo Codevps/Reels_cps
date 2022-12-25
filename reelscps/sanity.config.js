@@ -5,9 +5,9 @@ import {schemaTypes} from './schemas'
 
 export default defineConfig({
   name: 'default',
-  title: 'reels_cps',
+  title: 'reelscps',
 
-  projectId: 'gta2la2o',
+  projectId: 'xki7s4ns',
   dataset: 'production',
 
   plugins: [deskTool(), visionTool()],
