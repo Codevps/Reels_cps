@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import SideBar from "../components/SideBar";
 import NavBar from "../components/NavBar";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [isSSR, setIsSSR] = useState(true);
@@ -11,7 +12,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, []);
   if (isSSR) return null;
   return (
-    <div>
+    <GoogleOAuthProvider clientId="662598215585-kjeiih8b1drviv8v0mqipsp7coc8u66l.apps.googleusercontent.com">
       <NavBar />
       <div className="flex gap-6 md:gap-20">
         <div className="h-[92vh] overflow-hidden xl:hover:overflow-auto">
@@ -21,7 +22,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           <Component {...pageProps} />
         </div>
       </div>
-    </div>
+    </GoogleOAuthProvider>
   );
 };
 export default App;

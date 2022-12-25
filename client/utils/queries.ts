@@ -8,7 +8,7 @@ export const allPostsQuery = () => {
           url
         }
       },
-      userId,
+      userId ,
       postedBy->{
         _id,
         userName,
