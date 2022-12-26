@@ -68,7 +68,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
             setIsHover(false);
           }}
         >
-          <Link href={"/"}>
+          <Link href={`/detail/${post?._id}`}>
             <video
               loop
               ref={videoRef}
