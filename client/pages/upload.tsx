@@ -50,7 +50,7 @@ const Upload = () => {
           _type: "file",
           asset: {
             _type: "reference",
-            _ref: videoAsset?.id,
+            _ref: videoAsset?._id,
           },
         },
         userId: userProfile?._id,
@@ -61,8 +61,6 @@ const Upload = () => {
         topic: category,
       };
       await axios.post("http://localhost:3000/api/post", document);
-      console.log(document);
-
       router.push("/");
     }
   };
@@ -74,6 +72,10 @@ const Upload = () => {
     // setCategory(topics[0]?.name);
     // setSavingPost(false);
   };
+
+  useEffect(() => {
+    if (!userProfile) router.push("/");
+  }, [userProfile, router]);
 
   return (
     <div className="flex w-full h-full absolute left-0 top-[60px] mb-10 pt-10 lg:pt-20 bg-[#f8f8f8] justify-center">
