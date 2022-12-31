@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Video } from "../types";
 import { NextPage } from "next";
 import Link from "next/link";
@@ -25,6 +25,13 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
       setPlaying(true);
     }
   };
+
+  useEffect(() => {
+    if (videoRef?.current) {
+      videoRef.current.muted = isVideoMuted;
+    }
+  }, [isVideoMuted]);
+
   console.log(post?.video?.asset?.url);
   return (
     <div className="flex flex-col border-b-2 border-gray-200 pb-6">
