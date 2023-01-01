@@ -7,7 +7,7 @@ const authStore = (set: any) => ({
   addUser: (user: any) => set({ userProfile: user }),
   removeUser: () => set({ userProfile: null }),
   fetchAllUsers: async () => {
-    const response = await axios.get(`http:localhost:3000/api/users`);
+    const response = await axios.get(`http://localhost:3000/api/users`);
     set({ allUsers: response.data });
   },
 });
