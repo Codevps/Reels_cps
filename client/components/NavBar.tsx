@@ -67,7 +67,6 @@ const NavBar = () => {
                   <Image
                     width={40}
                     height={40}
-                    //host picture error : add image domain 1hr38min :in nextconfig
                     src={userProfile?.image}
                     alt={"profile photo"}
                     className="rounded-full cursor-pointer"

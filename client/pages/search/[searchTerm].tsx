@@ -1,88 +1,89 @@
-import axios from "axios";
+import React, { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
 import { GoVerified } from "react-icons/go";
+import Link from "next/link";
+import axios from "axios";
+
 import NoResults from "../../components/NoResults";
 import VideoCard from "../../components/VideoCard";
 import useAuthStore from "../../store/authStore";
 import { IUser, Video } from "../../types";
 
 const Search = ({ videos }: { videos: Video[] }) => {
-  const [showAccount, setShowAccount] = useState(false);
-  const { allUsers }: any = useAuthStore();
+  const [isAccounts, setIsAccounts] = useState(false);
+  const { allUsers }: { allUsers: IUser[] } = useAuthStore();
+
   const router = useRouter();
   const { searchTerm }: any = router.query;
-  const isAccounts = showAccount ? `border-b-2 border-black` : `text-gray-400`;
-  const isVideos = !showAccount ? `border-b-2 border-black` : `text-gray-400`;
-  const searchedAccounts = allUsers.filter((user: IUser) =>
-    user.userName.toLowerCase().includes(searchTerm?.toLowerCase())
+
+  const accounts = isAccounts ? "border-b-2 border-black" : "text-gray-400";
+  const isVideos = !isAccounts ? "border-b-2 border-black" : "text-gray-400";
+  const searchedAccounts = allUsers?.filter((user: IUser) =>
+    user.userName.toLowerCase().includes(searchTerm)
   );
 
   return (
-    <div className="w-full">
-      <div className="flex gap-10 mb-10 mt-10 border-b-2 border-gray-200 bg-white w-full">
+    <div className="w-full  ">
+      <div className="flex gap-10 mb-10 border-b-2 border-gray-200 md:fixed z-50 bg-white w-full">
         <p
-          className={`text-xl mt-2 font-semibold cursor-pointer ${isAccounts}`}
-          onClick={() => setShowAccount(true)}
+          onClick={() => setIsAccounts(true)}
+          className={`text-xl  font-semibold cursor-pointer ${accounts} mt-2`}
         >
           Accounts
         </p>
         <p
-          className={`text-xl mt-2 font-semibold cursor-pointer ${isVideos}`}
-          onClick={() => setShowAccount(false)}
+          className={`text-xl font-semibold cursor-pointer ${isVideos} mt-2`}
+          onClick={() => setIsAccounts(false)}
         >
           Videos
         </p>
       </div>
-      {showAccount ? (
-        <div className="md:mt-16 ">
+      {isAccounts ? (
+        <div className="md:mt-16">
           {searchedAccounts.length > 0 ? (
             searchedAccounts.map((user: IUser, idx: number) => (
-              <Link href={`/profile/${user._id}`} key={idx}>
-                <div className="flex p-2 cursor-pointer border-b-2 font-semibold rounded border-gray-200 gap-3">
+              <Link key={idx} href={`/profile/${user._id}`}>
+                <div className=" flex gap-3 p-2 cursor-pointer font-semibold rounded border-b-2 border-gray-200">
+                  <img
+                    src={user?.image}
+                    alt="userImage"
+                    width={50}
+                    height={50}
+                    style={{
+                      borderRadius: "50%",
+                    }}
+                  />
                   <div>
-                    <Image
-                      src={user.image}
-                      width={50}
-                      height={50}
-                      className="rounded-full"
-                      alt="user profile"
-                    />
-                    <div className="hidden xl:bock">
-                      <p className="flex gap-1 items-center text-md font-bold text-primary lowercase">
-                        {user?.userName?.replaceAll(" ", "")}
-                        <GoVerified className="text-blue-400" />
-                      </p>
-                      <p className="capitalize text-gray-400 text-xs">
-                        {user?.userName}
-                      </p>
-                    </div>
+                    <p className="flex gap-1 items-center text-lg font-bold text-primary">
+                      {user.userName} <GoVerified className="text-blue-400" />
+                    </p>
+                    <p className="capitalize text-gray-400 text-sm">
+                      {user.userName}
+                    </p>
                   </div>
                 </div>
               </Link>
             ))
           ) : (
-            <NoResults
-              text={`No accounts available with term ${searchTerm}!`}
-            />
+            <NoResults text={`No Account Results for ${searchTerm}`} />
           )}
         </div>
       ) : (
-        <div className="md:mt-16 flex flex-wrap gap-6 md:justify-start">
-          {videos.length > 0 ? (
-            videos.map((video: Video, idx: number) => (
-              <VideoCard post={video} key={idx} />
+        <div className="md:mt-16 flex flex-wrap gap-6 md:justify-start ">
+          {videos.length ? (
+            videos.map((post: Video, idx: number) => (
+              <VideoCard post={post} key={idx} />
             ))
           ) : (
-            <NoResults text={`No Videos available on ${searchTerm} yet!`} />
+            <NoResults text={`No Video Results for ${searchTerm}`} />
           )}
         </div>
       )}
     </div>
   );
 };
+
 export const getServerSideProps = async ({
   params: { searchTerm },
 }: {
@@ -91,9 +92,8 @@ export const getServerSideProps = async ({
   const res = await axios.get(`http://localhost:3000/api/search/${searchTerm}`);
 
   return {
-    props: {
-      videos: res.data,
-    },
+    props: { videos: res.data },
   };
 };
+
 export default Search;

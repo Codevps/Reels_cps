@@ -8,7 +8,6 @@ interface IProps {
   videos: Video[];
 }
 const Home = ({ videos }: IProps) => {
-  console.log(videos);
   return (
     <div className="flex flex-col gap-10 videos h-full">
       {videos?.length ? (
@@ -23,17 +22,18 @@ const Home = ({ videos }: IProps) => {
 };
 
 export const getServerSideProps = async ({
-  query: { topic },
+  query: { pathname },
 }: {
-  query: { topic: string };
+  query: { pathname: string };
 }) => {
   let response = null;
-  if (topic) {
-    response = await axios.get(`http://localhost:3000/api/discover/${topic}`);
+  if (pathname) {
+    response = await axios.get(
+      `http://localhost:3000/api/discover/${pathname}`
+    );
   } else {
     response = await axios.get(`http://localhost:3000/api/post`);
   }
-
   return {
     props: {
       videos: response.data,
