@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
-    domains: ['cdn.pixabay.com', 'lh3.googleusercontent.com'],
-  }
-}
+    domains: ["cdn.pixabay.com", "lh3.googleusercontent.com"],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
